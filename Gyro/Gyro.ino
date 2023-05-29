@@ -1,6 +1,6 @@
 #include <Wire.h>
 #include <Adafruit_NeoPixel.h>
-#include <Gyro.h>
+#include "Gyro.h"
 
 #define PIN        23
 #define NUMPIXELS  1
@@ -12,16 +12,18 @@ Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 void setup() {
   MyWire.begin();
   Serial.begin(115200);
+  delay(5000);
   pixels.begin();
   gyro.begin();
+  //gyro.calibrate();
 }
 
 void loop() {
   gyro.update();
   
-  float  red = constrain(map(gyro.getPitch(), -1, 1, 0, 255), 0, 255);
+  float  red = constrain(map(gyro.getPitch(), -85, 85, 0, 255), 0, 255);
   int green = 0;  // This could be set to any value you prefer or could also be mapped to another sensor reading
-  float  blue = constrain(map(gyro.getRoll(), -1, 1, 0, 255), 0, 255);
+  float  blue = constrain(map(gyro.getRoll(), -85, 85, 0, 255), 0, 255);
   
   pixels.clear();
   pixels.setPixelColor(0, pixels.Color(red, green, blue));
